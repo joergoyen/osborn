@@ -104,18 +104,20 @@
         }
 
         #overlay, #infoOverlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 15px;
-            background-color: rgba(179,228,255,0.9);
-            color: var(--background);
-            z-index: 2;
-            overflow-y: auto;
-            box-sizing: border-box;
+ display: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px; /* Gleiche Breite wie der Kachelcontainer */
+    max-width: 100%;
+    height: 100%;
+    padding: 15px;
+    background-color: rgba(179,228,255,0.9);
+    color: var(--background);
+    z-index: 2;
+    overflow-y: auto;
+    box-sizing: border-box;
         }
 
         #overlayText {
@@ -127,6 +129,11 @@
             #kachelContainer, #buttonContainer {
                 width: 100%;
             }
+            #overlay, #infoOverlay {
+        width: 100%;
+        left: 0;
+        transform: none;
+    }
         }
 
         @media (max-width: 359px) {
@@ -146,7 +153,7 @@
     <div id="infoOverlay">
         <p><strong>Zeit für Osborn, seine Fragen<br>und kreatives Denken</strong><br>
         Bist du bereit, deine Kreativität auf die nächste Stufe zu heben? Inspiriert von <a href="https://de.wikipedia.org/wiki/Alex_F._Osborn">Alex Faickney Osborns</a> innovativen Fragetechniken, präsentiere ich eine HomeScreen App, die speziell für Studierende in den Bereichen Innovation by Design und Layout & Typografie entwickelt wurde. Diese App ist dein Begleiter, um kreative Herausforderungen mit frischen Perspektiven anzugehen. Tauche ein in die Welt des kreativen Denkens und entdecke, wie Osborns Fragen deine Projekte bereichern können.<br><br>
-        Weblink zur HomeScreen App <a href="https://6936.de/osborn">6936.de/osborn</a><br><br>
+        Weblink zur HomeScreen App <a href="https://joergoyen.github.io/osborn/">6936.de/osborn</a><br><br>
         <span style="align-items: center; max-width: 300px;"><img src="qrcode_6936-de_osborn-questions_buero-joergoyen-de.png" width="70%"></span><br><br>
         Color by <a href="https://gehirngerecht.digital/">gehirngerecht.digital</a><br><br>
         Eine Büro <a href="https://joergoyen.de">joergoyen.de</a> Produktion 12.2023</p>
