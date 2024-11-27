@@ -40,14 +40,15 @@
             justify-content: flex-start;
             width: 440px;
             max-width: 100%;
-            gap: 5px;
-            padding: 5px;
+            gap: 8px;
+            padding: 8px;
             background-color: var(--background);
-            margin-bottom: 80px; /* Platz für den Button-Container */
+            margin-bottom: 80px;
+            box-sizing: border-box;
         }
 
         .kachel {
-            width: calc(25% - 4px);
+            width: calc(25% - 6px);
             aspect-ratio: 1;
             margin: 0;
             background-color: var(--red);
@@ -57,10 +58,13 @@
             cursor: pointer;
             border-radius: 5px;
             min-width: 80px;
+            padding: 8px;
+            box-sizing: border-box;
         }
 
         .kachel i {
             font-size: 24px;
+            padding: 8px;
         }
 
         .ausgewaehlt {
@@ -74,14 +78,14 @@
             max-width: 100%;
             display: flex;
             justify-content: flex-start;
-            padding: 10px;
+            padding: 8px;
             background-color: var(--background);
             box-sizing: border-box;
+            gap: 8px;
         }
 
         #resetButton, #infoButton {
-            margin-right: 10px;
-            padding: 10px;
+            padding: 8px;
             height: 60px;
             background-color: var(--red);
             color: var(--background);
@@ -90,11 +94,18 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #resetButton {
             background-color: var(--info);
             flex-grow: 1;
+        }
+
+        #resetButton span {
+            padding: 8px;
         }
 
         #infoButton {
@@ -104,41 +115,41 @@
         }
 
         #overlay, #infoOverlay {
- display: none;
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 440px; /* Gleiche Breite wie der Kachelcontainer */
-    max-width: 100%;
-    height: 100%;
-    padding: 15px;
-    background-color: rgba(179,228,255,0.9);
-    color: var(--background);
-    z-index: 2;
-    overflow-y: auto;
-    box-sizing: border-box;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 440px;
+            max-width: 100%;
+            height: 100%;
+            padding: 8px;
+            background-color: rgba(179,228,255,0.9);
+            color: var(--background);
+            z-index: 2;
+            overflow-y: auto;
+            box-sizing: border-box;
         }
 
         #overlayText {
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 8px;
         }
 
         @media (max-width: 440px) {
             #kachelContainer, #buttonContainer {
                 width: 100%;
             }
+            
             #overlay, #infoOverlay {
-        width: 100%;
-        left: 0;
-        transform: none;
-    }
+                width: 100%;
+                left: 0;
+                transform: none;
+            }
         }
 
         @media (max-width: 359px) {
             .kachel {
-                width: calc(33.33% - 4px);
+                width: calc(33.33% - 6px);
             }
         }
     </style>
@@ -153,7 +164,7 @@
     <div id="infoOverlay">
         <p><strong>Zeit für Osborn, seine Fragen<br>und kreatives Denken</strong><br>
         Bist du bereit, deine Kreativität auf die nächste Stufe zu heben? Inspiriert von <a href="https://de.wikipedia.org/wiki/Alex_F._Osborn">Alex Faickney Osborns</a> innovativen Fragetechniken, präsentiere ich eine HomeScreen App, die speziell für Studierende in den Bereichen Innovation by Design und Layout & Typografie entwickelt wurde. Diese App ist dein Begleiter, um kreative Herausforderungen mit frischen Perspektiven anzugehen. Tauche ein in die Welt des kreativen Denkens und entdecke, wie Osborns Fragen deine Projekte bereichern können.<br><br>
-        Weblink zur HomeScreen App <a href="https://joergoyen.github.io/osborn/">6936.de/osborn</a><br><br>
+        Weblink zur HomeScreen App <a href="https://6936.de/osborn">6936.de/osborn</a><br><br>
         <span style="align-items: center; max-width: 300px;"><img src="qrcode_6936-de_osborn-questions_buero-joergoyen-de.png" width="70%"></span><br><br>
         Color by <a href="https://gehirngerecht.digital/">gehirngerecht.digital</a><br><br>
         Eine Büro <a href="https://joergoyen.de">joergoyen.de</a> Produktion 12.2023</p>
@@ -244,7 +255,6 @@
         const infoButton = document.getElementById('infoButton');
         const infoOverlay = document.getElementById('infoOverlay');
 
-        // Kacheln erstellen
         kategorien.forEach(kategorie => {
             const kachel = document.createElement('div');
             kachel.classList.add('kachel');
@@ -257,7 +267,6 @@
             kachelContainer.appendChild(kachel);
         });
 
-        // Event Listeners
         overlay.onclick = function() {
             this.style.display = 'none';
         };
