@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable = no, viewport-fit=cover">
+    <meta name="author" content="Jörg Oyen, Büro joergoyen.de">
+    <title>Osborn-Fragen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --red: #fed9d1;
+            --green: #caf3ca;
+            --info: #fcefbc;
+            --active: #007bff;
+            --background: #1f1f1f;
+            --safe-area-inset-top: env(safe-area-inset-top);
+        }
+        
+        html {
+            background-color: var(--background);
+        }
+        
+        body {
+            font-family: sans-serif;
+            color: var(--background);
+            font-size: 16px;
+            padding-top: var(--safe-area-inset-top);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #kachelContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            width: 440px;
+            max-width: 100%;
+            gap: 5px;
+            padding: 5px;
+            background-color: var(--background);
+            margin-bottom: 80px; /* Platz für den Button-Container */
+        }
+
+        .kachel {
+            width: calc(25% - 4px);
+            aspect-ratio: 1;
+            margin: 0;
+            background-color: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 5px;
+            min-width: 80px;
+        }
+
+        .kachel i {
+            font-size: 24px;
+        }
+
+        .ausgewaehlt {
+            background-color: var(--green);
+        }
+
+        #buttonContainer {
+            position: fixed;
+            bottom: 0;
+            width: 440px;
+            max-width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            padding: 10px;
+            background-color: var(--background);
+            box-sizing: border-box;
+        }
+
+        #resetButton, #infoButton {
+            margin-right: 10px;
+            padding: 10px;
+            height: 60px;
+            background-color: var(--red);
+            color: var(--background);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #resetButton {
+            background-color: var(--info);
+            flex-grow: 1;
+        }
+
+        #infoButton {
+            background-color: var(--background);
+            color: white;
+            width: 80px;
+        }
+
+        #overlay, #infoOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            background-color: rgba(179,228,255,0.9);
+            color: var(--background);
+            z-index: 2;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        #overlayText {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 440px) {
+            #kachelContainer, #buttonContainer {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 359px) {
+            .kachel {
+                width: calc(33.33% - 4px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="kachelContainer"></div>
+    
+    <div id="overlay">
+        <p id="overlayText"></p>
+    </div>
+
+    <div id="infoOverlay">
+        <p><strong>Zeit für Osborn, seine Fragen<br>und kreatives Denken</strong><br>
+        Bist du bereit, deine Kreativität auf die nächste Stufe zu heben? Inspiriert von <a href="https://de.wikipedia.org/wiki/Alex_F._Osborn">Alex Faickney Osborns</a> innovativen Fragetechniken, präsentiere ich eine HomeScreen App, die speziell für Studierende in den Bereichen Innovation by Design und Layout & Typografie entwickelt wurde. Diese App ist dein Begleiter, um kreative Herausforderungen mit frischen Perspektiven anzugehen. Tauche ein in die Welt des kreativen Denkens und entdecke, wie Osborns Fragen deine Projekte bereichern können.<br><br>
+        Weblink zur HomeScreen App <a href="https://6936.de/osborn">6936.de/osborn</a><br><br>
+        <span style="align-items: center; max-width: 300px;"><img src="qrcode_6936-de_osborn-questions_buero-joergoyen-de.png" width="70%"></span><br><br>
+        Color by <a href="https://gehirngerecht.digital/">gehirngerecht.digital</a><br><br>
+        Eine Büro <a href="https://joergoyen.de">joergoyen.de</a> Produktion 12.2023</p>
+    </div>
+
+    <div id="buttonContainer">
+        <button id="resetButton"><span style="font-size: 15px;"><strong>Noch eine Runde Osborn Fragen?</strong></span></button>
+        <button id="infoButton">Info</button>
+    </div>
+
+    <script>
+        const kategorien = [
+            {
+                name: "Anpassen",
+                frage: "Was kann angepasst werden? Gibt es Parallelen in der Vergangenheit?",
+                icon: "fas fa-tools"
+            },
+            {
+                name: "Modifizieren",
+                frage: "Was kann geändert werden? <br>In Farbe, Bewegung, Klang, Geruch, Form, oder Prozess?",
+                icon: "fas fa-edit"
+            },
+            {
+                name: "Umkehren",
+                frage: "Wie wäre es, wenn wir die Richtung umkehren oder das Gegenteil tun?",
+                icon: "fas fa-undo-alt"
+            },
+            {
+                name: "Erweitern",
+                frage: "Kann etwas erweitert werden? <br>Mehr Zeit, mehr Frequenz, größer, länger?",
+                icon: "fas fa-expand-arrows-alt"
+            },
+            {
+                name: "Kombinieren",
+                frage: "Was kann kombiniert werden? Können wir Ideen oder Ziele vereinen?",
+                icon: "fas fa-compress-arrows-alt"
+            },
+            {
+                name: "Substituieren",
+                frage: "Was kann ersetzt werden? Personen, Zutaten, Materialien, Prozesse?",
+                icon: "fas fa-exchange-alt"
+            },
+            {
+                name: "Umgestalten",
+                frage: "Können wir die Form oder das Layout ändern? <br>Gibt es andere Anwendungen?",
+                icon: "fas fa-shapes"
+            },
+            {
+                name: "Vergleichen",
+                frage: "Gibt es etwas, mit dem wir vergleichen können? <br>Analogien oder Metaphern?",
+                icon: "fas fa-balance-scale"
+            },
+            {
+                name: "Vereinfachen",
+                frage: "Was kann entfernt oder vereinfacht werden?",
+                icon: "fas fa-stream"
+            },
+            {
+                name: "Anordnen",
+                frage: "Kann die Reihenfolge verändert werden? <br>Gibt es eine andere Anordnung oder Sequenz?",
+                icon: "fas fa-sort"
+            },
+            {
+                name: "Multiplizieren",
+                frage: "Können wir etwas vervielfachen oder wiederholen?",
+                icon: "fas fa-plus"
+            },
+            {
+                name: "Subtrahieren",
+                frage: "Was kann entfernt oder reduziert werden?",
+                icon: "fas fa-minus"
+            },
+            {
+                name: "Rückgängig machen",
+                frage: "Was passiert, wenn wir Schritte rückgängig machen oder dekonstruieren?",
+                icon: "fas fa-history"
+            },
+            {
+                name: "Hypothetisieren",
+                frage: "Was wäre, wenn...? <br>Können wir hypothetische Szenarien durchspielen?",
+                icon: "fas fa-lightbulb"
+            }
+        ];
+
+        const kachelContainer = document.getElementById('kachelContainer');
+        const overlay = document.getElementById('overlay');
+        const overlayText = document.getElementById('overlayText');
+        const infoButton = document.getElementById('infoButton');
+        const infoOverlay = document.getElementById('infoOverlay');
+
+        // Kacheln erstellen
+        kategorien.forEach(kategorie => {
+            const kachel = document.createElement('div');
+            kachel.classList.add('kachel');
+            kachel.innerHTML = `<i class="${kategorie.icon}"></i>`;
+            kachel.onclick = function() {
+                this.classList.add('ausgewaehlt');
+                overlay.style.display = 'flex';
+                overlayText.innerHTML = `<h2><i class='${kategorie.icon}'></i> ${kategorie.name}</h2><p style='font-size: 20px; line-height: 1.5'>${kategorie.frage}</p>`;
+            };
+            kachelContainer.appendChild(kachel);
+        });
+
+        // Event Listeners
+        overlay.onclick = function() {
+            this.style.display = 'none';
+        };
+
+        infoButton.onclick = function() {
+            infoOverlay.style.display = 'flex';
+        };
+
+        infoOverlay.onclick = function() {
+            this.style.display = 'none';
+        };
+
+        document.getElementById('resetButton').onclick = function() {
+            document.querySelectorAll('.kachel').forEach(k => k.classList.remove('ausgewaehlt'));
+        };
+    </script>
+</body>
+</html>
